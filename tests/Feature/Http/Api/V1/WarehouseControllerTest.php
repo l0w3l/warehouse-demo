@@ -8,7 +8,7 @@ beforeEach(function () {
 });
 
 test('test warehouse index', function () {
-    $response = $this->getJson(route('api.v1.warehouse.index'));
+    $response = $this->getJson(route('api.v1.warehouses.index'));
 
     $response->assertOk()
         ->assertJsonCount(
