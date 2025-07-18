@@ -13,7 +13,9 @@ use Illuminate\Database\Seeder;
 class AppSeeder extends Seeder
 {
     const PRODUCTS_COUNT = 10;
+
     const WAREHOUSE_COUNT = 5;
+
     const ORDERS_COUNT = 10;
 
     /**
