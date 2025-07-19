@@ -24,14 +24,14 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryI
     public function allProductsBy(int $warehouseId): Collection
     {
         $products = Product::with('stocks.warehouse')
-            ->whereHas('stocks', fn(Builder $builder) => $builder->where('warehouse_id', $warehouseId))
+            ->whereHas('stocks', fn (Builder $builder) => $builder->where('warehouse_id', $warehouseId))
             ->get();
 
         return $this->collectProductData($products);
     }
 
     /**
-     * @param EloquentCollection<Product> $products
+     * @param  EloquentCollection<Product>  $products
      * @return Collection<ProductData>
      */
     private function collectProductData(EloquentCollection $products): Collection

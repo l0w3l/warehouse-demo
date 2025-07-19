@@ -23,13 +23,12 @@ class OrderItemResource extends JsonResource
             'customer' => $this->customer,
             'total_amount' => $this->total_amount,
             'total_quantity' => $this->total_quantity,
-
             'status' => $this->status->value,
-
-            'products' => $this->products,
-            'warehouse' => $this->warehouse,
-
             'completed_at' => $this->completed_at,
+
+            'warehouse' => $this->warehouse,
+            'products' => $this->products,
+
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,
         ];

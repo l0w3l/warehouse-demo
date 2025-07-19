@@ -8,9 +8,10 @@ use App\Data\Repositories\Order\OrderData;
 use App\Enums\Enums\Reposiitories\Order\OrderFiltersEnum;
 use App\Enums\Models\Order\OrderStatusEnum;
 use App\Exceptions\Repositories\DBTransactionException;
+use App\Exceptions\Repositories\Order\CannotUpdateNonActiveOrders;
+use App\Exceptions\Repositories\Order\OrderNotFoundException;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Stock;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -39,6 +40,39 @@ class OrderRepository extends AbstractRepository implements OrderRepositoryInter
                     'customer' => $customer,
                     'warehouse_id' => $warehouseId,
                     'status' => ORderStatusEnum::ACTIVE,
+                    'completed_at' => null,
+                ]);
+
+                $order->order_items()->createMany(
+                    (new Collection($products))->map(fn ($product) => [
+                        'order_id' => $order->id,
+                        'product_id' => $product['id'],
+                        'count' => $product['quantity'],
+                    ])
+                );
+
+                return $order;
+            });
+
+            return $this->wrapOrder($order);
+        } catch (\Throwable $e) {
+            throw new DBTransactionException($e->getMessage(), (int) $e->getCode(), $e);
+        }
+    }
+
+    public function update(int $orderId, string $customer, int $warehouseId, array $products = []): OrderData
+    {
+        try {
+            $order = DB::transaction(function () use ($orderId, $customer, $warehouseId, $products) {
+                $order = Order::find($orderId) ?? throw new OrderNotFoundException("Order with id {$orderId} not found");
+
+                if ($order->status !== OrderStatusEnum::ACTIVE) {
+                    throw new CannotUpdateNonActiveOrders('Cannot update non active order');
+                }
+
+                $order->update([
+                    'customer' => $customer,
+                    'warehouse_id' => $warehouseId,
                     'completed_at' => null,
                 ]);
 

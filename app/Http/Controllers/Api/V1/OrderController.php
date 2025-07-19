@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Data\Services\Order\CreateOrderData;
+use App\Data\Services\Order\UpdateOrderData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Order\StoreOrderRequest;
+use App\Http\Requests\V1\Order\UpdateOrderRequest;
 use App\Http\Resources\V1\Order\OrderItemResource;
 use App\Services\Order\OrderServiceInterface;
 use Exception;
@@ -39,7 +41,9 @@ class OrderController extends Controller
             $payload = $request->validated();
             $createOrderData = CreateOrderData::from($payload);
 
-            return OrderItemResource::make($this->orderService->create($createOrderData));
+            $order = $this->orderService->create($createOrderData);
+
+            return OrderItemResource::make($order);
         } catch (Exception $e) {
             return $this->notFoundJson([
                 'message' => $e->getMessage(),
@@ -48,19 +52,22 @@ class OrderController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateOrderRequest $request, int $order)
     {
-        //
+        try {
+            $payload = $request->validated();
+            $updateOrderData = UpdateOrderData::from($payload);
+
+            $order = $this->orderService->update($order, $updateOrderData);
+
+            return OrderItemResource::make($order);
+        } catch (Exception $e) {
+            return $this->notFoundJson([
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 
     /**

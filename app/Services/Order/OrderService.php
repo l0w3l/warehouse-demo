@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace App\Services\Order;
 
 use App\Data\Repositories\Order\OrderData;
-use App\Data\Repositories\Order\OrderProductsData;
-use App\Data\Repositories\Product\ProductData;
 use App\Data\Services\Order\CreateOrderData;
 use App\Data\Services\Order\CreateOrderProductsData;
+use App\Data\Services\Order\UpdateOrderData;
 use App\Enums\Enums\Reposiitories\Order\OrderFiltersEnum;
 use App\Exceptions\Repositories\DBTransactionException;
 use App\Exceptions\Services\Order\CannotCreateOrderException;
@@ -35,18 +34,40 @@ class OrderService extends AbstractService implements OrderServiceInterface
         return $this->orderRepository->all($offset, $limit, $filter);
     }
 
-    public function create(CreateOrderData $orderInfo): OrderData
+    public function create(CreateOrderData $createOrderData): OrderData
     {
         try {
-            $productsByGivenWarehouse = $this->productRepository->allProductsBy($orderInfo->warehouse_id);
+            $productsByGivenWarehouse = $this->productRepository->allProductsBy($createOrderData->warehouse_id);
 
-            $productsAndQuantityFiltered = (new Collection($orderInfo->products))
+            $productsAndQuantityFiltered = (new Collection($createOrderData->products))
                 ->filter(fn (CreateOrderProductsData $x) => $productsByGivenWarehouse->contains('id', '=', $x->id))
                 ->toArray();
 
             return $this->orderRepository->create(
-                $orderInfo->customer,
-                $orderInfo->warehouse_id,
+                $createOrderData->customer,
+                $createOrderData->warehouse_id,
+                $productsAndQuantityFiltered,
+            );
+        } catch (DBTransactionException $e) {
+            throw new CannotCreateOrderException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    public function update(OrderData|int $orderData, UpdateOrderData $updateOrderData): OrderData
+    {
+        try {
+            $orderData = $orderData->id ?? $orderData;
+
+            $productsByGivenWarehouse = $this->productRepository->allProductsBy($updateOrderData->warehouse_id);
+
+            $productsAndQuantityFiltered = (new Collection($updateOrderData->products))
+                ->filter(fn (CreateOrderProductsData $x) => $productsByGivenWarehouse->contains('id', '=', $x->id))
+                ->toArray();
+
+            return $this->orderRepository->update(
+                $orderData,
+                $updateOrderData->customer,
+                $updateOrderData->warehouse_id,
                 $productsAndQuantityFiltered,
             );
         } catch (DBTransactionException $e) {

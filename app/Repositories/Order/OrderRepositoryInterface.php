@@ -26,4 +26,14 @@ interface OrderRepositoryInterface extends RepositoryInterface
      * @throws DBTransactionException
      */
     public function create(string $customer, int $warehouseId, array $products = []): OrderData;
+
+    /**
+     * @param array{
+     *     id: int,
+     *     quantity: int
+     * } $products
+     *
+     * @throws DBTransactionException
+     */
+    public function update(int $orderId, string $customer, int $warehouseId, array $products = []): OrderData;
 }
