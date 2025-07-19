@@ -8,6 +8,7 @@ use App\Data\Repositories\Order\OrderData;
 use App\Enums\Enums\Reposiitories\Order\OrderFiltersEnum;
 use App\Enums\Models\Order\OrderStatusEnum;
 use App\Exceptions\Repositories\DBTransactionException;
+use App\Exceptions\Repositories\Order\CanceledToCompleteStatusException;
 use App\Exceptions\Repositories\Order\ChangeCompletedStatusException;
 use App\Exceptions\Repositories\Order\OrderNotFoundException;
 use Illuminate\Support\Collection;
@@ -43,6 +44,7 @@ interface OrderRepositoryInterface extends RepositoryInterface
     /**
      * @throws ChangeCompletedStatusException
      * @throws OrderNotFoundException
+     * @throws CanceledToCompleteStatusException
      */
     public function setStatus(int $orderId, OrderStatusEnum $orderStatusEnum): OrderData;
 }

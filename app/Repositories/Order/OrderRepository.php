@@ -8,6 +8,7 @@ use App\Data\Repositories\Order\OrderData;
 use App\Enums\Enums\Reposiitories\Order\OrderFiltersEnum;
 use App\Enums\Models\Order\OrderStatusEnum;
 use App\Exceptions\Repositories\DBTransactionException;
+use App\Exceptions\Repositories\Order\CanceledToCompleteStatusException;
 use App\Exceptions\Repositories\Order\CannotUpdateNonActiveOrders;
 use App\Exceptions\Repositories\Order\ChangeCompletedStatusException;
 use App\Exceptions\Repositories\Order\OrderNotFoundException;
@@ -102,9 +103,20 @@ class OrderRepository extends AbstractRepository implements OrderRepositoryInter
             throw new ChangeCompletedStatusException('Cannot change completed order');
         }
 
-        $order->update([
-            'status' => $orderStatusEnum,
-        ]);
+        if ($order->status === OrderStatusEnum::CANCELLED && $orderStatusEnum === OrderStatusEnum::COMPLETED) {
+            throw new CanceledToCompleteStatusException('Cannot complete canceled order');
+        }
+
+        if ($orderStatusEnum === OrderStatusEnum::COMPLETED) {
+            $order->update([
+                'status' => $orderStatusEnum,
+                'completed_at' => now(),
+            ]);
+        } else {
+            $order->update([
+                'status' => $orderStatusEnum,
+            ]);
+        }
 
         return $this->wrapOrder($order);
     }

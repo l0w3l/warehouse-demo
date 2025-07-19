@@ -235,3 +235,55 @@ test('order restore test', function () {
         ->and($updateStatusResponse->json('data.status'))
         ->toEqual($creationResponse->json('data.status'));
 });
+
+test('order complete test', function () {
+    $warehouse = Stock::first()->warehouse;
+
+    $testRequest = [
+        'customer' => 'test',
+        'warehouse_id' => $warehouse->id,
+        'products' => $warehouse->stock->map(fn (Stock $stock) => [
+            'id' => $stock->product_id,
+            'quantity' => fake()->numberBetween(1, $stock->stock),
+        ]),
+    ];
+
+    $creationResponse = $this->postJson(route('api.v1.orders.store'), $testRequest);
+
+    $oldStock = Stock::where('warehouse_id', $warehouse->id)->get();
+
+    expect($creationResponse->json('data.status'))->toEqual(OrderStatusEnum::ACTIVE->value);
+
+    $completedResponse = $this->getJson(route('api.v1.orders.complete', [
+        'order' => Order::latest('id')->first()->id,
+    ]));
+
+    $completedResponse->assertOk()
+        ->assertJsonStructure([
+            'data' => [
+                'id',
+                'customer',
+                'total_amount',
+                'total_quantity',
+                'products' => [
+                    '*' => [
+                        'id',
+                        'name',
+                        'price',
+                        'quantity',
+                        'updated_at',
+                        'created_at',
+                    ],
+                ],
+                'completed_at',
+                'updated_at',
+                'created_at',
+            ],
+        ]);
+
+    expect($completedResponse->json('data.status'))->toEqual(OrderStatusEnum::COMPLETED->value);
+
+    $newStock = Stock::where('warehouse_id', $warehouse->id)->get();
+
+    $this->assertNotEquals($oldStock->toArray(), $newStock->toArray());
+});

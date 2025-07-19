@@ -29,4 +29,6 @@ interface OrderServiceInterface extends ServiceInterface
     public function cancel(OrderData|int $orderData): OrderData;
 
     public function restore(OrderData|int $orderData): OrderData;
+
+    public function complete(OrderData|int $orderData): OrderData;
 }

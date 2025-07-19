@@ -95,4 +95,17 @@ class OrderController extends Controller
             ]);
         }
     }
+
+    public function complete(int $order)
+    {
+        try {
+            $order = $this->orderService->complete($order);
+
+            return OrderItemResource::make($order);
+        } catch (Exception $e) {
+            return $this->notFoundJson([
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
 }

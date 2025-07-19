@@ -12,10 +12,12 @@ use App\Enums\Enums\Reposiitories\Order\OrderFiltersEnum;
 use App\Enums\Models\Order\OrderStatusEnum;
 use App\Exceptions\Repositories\DBTransactionException;
 use App\Exceptions\Services\Order\CannotCreateOrderException;
+use App\Exceptions\Services\Order\FailedOrderCompleteAction;
 use App\Repositories\Order\OrderRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\Warehouse\WarehouseRepositoryInterface;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Lowel\LaravelServiceMaker\Services\AbstractService;
 
 class OrderService extends AbstractService implements OrderServiceInterface
@@ -88,5 +90,28 @@ class OrderService extends AbstractService implements OrderServiceInterface
         $orderData = $orderData->id ?? $orderData;
 
         return $this->orderRepository->setStatus($orderData, OrderStatusEnum::ACTIVE);
+    }
+
+    public function complete(OrderData|int $orderData): OrderData
+    {
+        $orderData = $orderData->id ?? $orderData;
+
+        try {
+            return DB::transaction(function () use ($orderData) {
+                $orderData = $this->orderRepository->setStatus($orderData, OrderStatusEnum::COMPLETED);
+
+                foreach ($orderData->products as $product) {
+                    $this->warehouseRepository->decStock(
+                        $orderData->warehouse->id,
+                        $product->id,
+                        $product->quantity,
+                    );
+                }
+
+                return $orderData;
+            });
+        } catch (\Throwable $e) {
+            throw new FailedOrderCompleteAction('Failed complete order action');
+        }
     }
 }
