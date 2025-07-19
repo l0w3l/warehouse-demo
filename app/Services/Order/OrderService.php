@@ -82,4 +82,11 @@ class OrderService extends AbstractService implements OrderServiceInterface
 
         return $this->orderRepository->setStatus($orderData, OrderStatusEnum::CANCELLED);
     }
+
+    public function restore(OrderData|int $orderData): OrderData
+    {
+        $orderData = $orderData->id ?? $orderData;
+
+        return $this->orderRepository->setStatus($orderData, OrderStatusEnum::ACTIVE);
+    }
 }

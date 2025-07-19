@@ -9,4 +9,5 @@ Route::apiResource('orders', OrderController::class)
 
 Route::prefix('/orders')->name('orders.')->group(function () {
     Route::get('/{order}/cancel', [OrderController::class, 'cancel'])->name('cancel');
+    Route::get('/{order}/restore', [OrderController::class, 'restore'])->name('restore');
 });

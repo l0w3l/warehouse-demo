@@ -9,6 +9,7 @@ use App\Enums\Enums\Reposiitories\Order\OrderFiltersEnum;
 use App\Enums\Models\Order\OrderStatusEnum;
 use App\Exceptions\Repositories\DBTransactionException;
 use App\Exceptions\Repositories\Order\CannotUpdateNonActiveOrders;
+use App\Exceptions\Repositories\Order\ChangeCompletedStatusException;
 use App\Exceptions\Repositories\Order\OrderNotFoundException;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -96,6 +97,10 @@ class OrderRepository extends AbstractRepository implements OrderRepositoryInter
     public function setStatus(int $orderId, OrderStatusEnum $orderStatusEnum): OrderData
     {
         $order = Order::with('warehouse.stock')->find($orderId) ?? throw new OrderNotFoundException("Order with id {$orderId} not found");
+
+        if ($order->status === OrderStatusEnum::COMPLETED) {
+            throw new ChangeCompletedStatusException('Cannot change completed order');
+        }
 
         $order->update([
             'status' => $orderStatusEnum,

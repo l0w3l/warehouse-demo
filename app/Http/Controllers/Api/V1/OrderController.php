@@ -70,10 +70,23 @@ class OrderController extends Controller
         }
     }
 
-    public function cancel(Request $request, int $order)
+    public function cancel(int $order)
     {
         try {
             $order = $this->orderService->cancel($order);
+
+            return OrderItemResource::make($order);
+        } catch (Exception $e) {
+            return $this->notFoundJson([
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    public function restore(int $order)
+    {
+        try {
+            $order = $this->orderService->restore($order);
 
             return OrderItemResource::make($order);
         } catch (Exception $e) {
