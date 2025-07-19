@@ -9,6 +9,7 @@ use App\Data\Services\Order\CreateOrderData;
 use App\Data\Services\Order\CreateOrderProductsData;
 use App\Data\Services\Order\UpdateOrderData;
 use App\Enums\Enums\Reposiitories\Order\OrderFiltersEnum;
+use App\Enums\Models\Order\OrderStatusEnum;
 use App\Exceptions\Repositories\DBTransactionException;
 use App\Exceptions\Services\Order\CannotCreateOrderException;
 use App\Repositories\Order\OrderRepositoryInterface;
@@ -73,5 +74,12 @@ class OrderService extends AbstractService implements OrderServiceInterface
         } catch (DBTransactionException $e) {
             throw new CannotCreateOrderException($e->getMessage(), $e->getCode(), $e);
         }
+    }
+
+    public function cancel(OrderData|int $orderData): OrderData
+    {
+        $orderData = $orderData->id ?? $orderData;
+
+        return $this->orderRepository->setStatus($orderData, OrderStatusEnum::CANCELLED);
     }
 }

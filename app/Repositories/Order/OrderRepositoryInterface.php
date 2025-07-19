@@ -6,7 +6,9 @@ namespace App\Repositories\Order;
 
 use App\Data\Repositories\Order\OrderData;
 use App\Enums\Enums\Reposiitories\Order\OrderFiltersEnum;
+use App\Enums\Models\Order\OrderStatusEnum;
 use App\Exceptions\Repositories\DBTransactionException;
+use App\Exceptions\Repositories\Order\OrderNotFoundException;
 use Illuminate\Support\Collection;
 use Lowel\LaravelServiceMaker\Repositories\RepositoryInterface;
 
@@ -36,4 +38,9 @@ interface OrderRepositoryInterface extends RepositoryInterface
      * @throws DBTransactionException
      */
     public function update(int $orderId, string $customer, int $warehouseId, array $products = []): OrderData;
+
+    /**
+     * @throws OrderNotFoundException
+     */
+    public function setStatus(int $orderId, OrderStatusEnum $orderStatusEnum): OrderData;
 }

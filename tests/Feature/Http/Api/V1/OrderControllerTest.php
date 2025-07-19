@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Models\Order\OrderStatusEnum;
 use App\Models\Order;
 use App\Models\Stock;
 use Database\Seeders\AppSeeder;
@@ -131,4 +132,51 @@ test('order update test', function () {
         ->toEqual($creationResponse->json('data.id'))
         ->and($updateResponse->json('data.customer'))
         ->not()->toEqual($creationResponse->json('data.customer'));
+});
+
+test('order cancel test', function () {
+    $warehouse = Stock::first()->warehouse;
+
+    $testRequest = [
+        'customer' => 'test',
+        'warehouse_id' => $warehouse->id,
+        'products' => $warehouse->stock->map(fn (Stock $stock) => [
+            'id' => $stock->product_id,
+            'quantity' => fake()->numberBetween(1, $stock->stock),
+        ]),
+    ];
+
+    $creationResponse = $this->postJson(route('api.v1.orders.store'), $testRequest);
+
+    $updateStatusResponse = $this->getJson(route('api.v1.orders.cancel', [
+        'order' => Order::latest('id')->first()->id,
+    ]));
+
+    $updateStatusResponse->assertOk()
+        ->assertJsonStructure([
+            'data' => [
+                'id',
+                'customer',
+                'total_amount',
+                'total_quantity',
+                'products' => [
+                    '*' => [
+                        'id',
+                        'name',
+                        'price',
+                        'quantity',
+                        'updated_at',
+                        'created_at',
+                    ],
+                ],
+                'completed_at',
+                'updated_at',
+                'created_at',
+            ],
+        ]);
+
+    expect($updateStatusResponse->json('data.status'))
+        ->toEqual(OrderStatusEnum::CANCELLED->value)
+        ->and($updateStatusResponse->json('data.status'))
+        ->not()->toEqual($creationResponse->json('data.status'));
 });

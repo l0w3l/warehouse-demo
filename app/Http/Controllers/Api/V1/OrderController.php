@@ -70,11 +70,16 @@ class OrderController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function cancel(Request $request, int $order)
     {
-        //
+        try {
+            $order = $this->orderService->cancel($order);
+
+            return OrderItemResource::make($order);
+        } catch (Exception $e) {
+            return $this->notFoundJson([
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 }

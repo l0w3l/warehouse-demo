@@ -93,6 +93,17 @@ class OrderRepository extends AbstractRepository implements OrderRepositoryInter
         }
     }
 
+    public function setStatus(int $orderId, OrderStatusEnum $orderStatusEnum): OrderData
+    {
+        $order = Order::with('warehouse.stock')->find($orderId) ?? throw new OrderNotFoundException("Order with id {$orderId} not found");
+
+        $order->update([
+            'status' => $orderStatusEnum,
+        ]);
+
+        return $this->wrapOrder($order);
+    }
+
     /**
      * @param  EloquentCollection<Order>  $orders
      * @return Collection<OrderData>
