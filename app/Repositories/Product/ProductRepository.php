@@ -7,6 +7,8 @@ namespace App\Repositories\Product;
 use App\Data\Repositories\Product\ProductData;
 use App\Models\Product;
 use App\Models\Stock;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Lowel\LaravelServiceMaker\Repositories\AbstractRepository;
 
@@ -16,6 +18,24 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryI
     {
         $products = Product::with('stocks.warehouse')->offset($offset)->limit($limit)->get();
 
+        return $this->collectProductData($products);
+    }
+
+    public function allProductsBy(int $warehouseId): Collection
+    {
+        $products = Product::with('stocks.warehouse')
+            ->whereHas('stocks', fn(Builder $builder) => $builder->where('warehouse_id', $warehouseId))
+            ->get();
+
+        return $this->collectProductData($products);
+    }
+
+    /**
+     * @param EloquentCollection<Product> $products
+     * @return Collection<ProductData>
+     */
+    private function collectProductData(EloquentCollection $products): Collection
+    {
         return ProductData::collect(
             $products->map(function (Product $product) {
                 return [

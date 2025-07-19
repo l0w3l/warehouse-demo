@@ -11,6 +11,7 @@ class OrderProductsData extends Data
         public int $id,
         public string $name,
         public float $price,
+        public int $quantity,
 
         public DateTimeImmutable $created_at,
         public DateTimeImmutable $updated_at,

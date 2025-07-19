@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Stock;
 use Database\Seeders\AppSeeder;
 
 beforeEach(function () {
@@ -22,6 +23,7 @@ test('order index test', function () {
                             'id',
                             'name',
                             'price',
+                            'quantity',
                             'updated_at',
                             'created_at',
                         ],
@@ -30,6 +32,44 @@ test('order index test', function () {
                     'updated_at',
                     'created_at',
                 ],
+            ],
+        ]);
+});
+
+test('order store test', function () {
+    $warehouse = Stock::first()->warehouse;
+
+    $testRequest = [
+        'customer' => 'test',
+        'warehouse_id' => $warehouse->id,
+        'products' => $warehouse->stock->map(fn (Stock $stock) => [
+            'id' => $stock->product_id,
+            'quantity' => fake()->numberBetween(1, $stock->stock),
+        ]),
+    ];
+
+    $response = $this->postJson(route('api.v1.orders.store'), $testRequest);
+
+    $response->assertOk()
+        ->assertJsonStructure([
+            'data' => [
+                'id',
+                'customer',
+                'total_amount',
+                'total_quantity',
+                'products' => [
+                    '*' => [
+                        'id',
+                        'name',
+                        'price',
+                        'quantity',
+                        'updated_at',
+                        'created_at',
+                    ],
+                ],
+                'completed_at',
+                'updated_at',
+                'created_at',
             ],
         ]);
 });

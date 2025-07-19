@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Data\Services\Order\CreateOrderData;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Order\StoreOrderRequest;
 use App\Http\Resources\V1\Order\OrderItemResource;
 use App\Services\Order\OrderServiceInterface;
+use Exception;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -30,9 +33,18 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreOrderRequest $request)
     {
-        //
+        try {
+            $payload = $request->validated();
+            $createOrderData = CreateOrderData::from($payload);
+
+            return OrderItemResource::make($this->orderService->create($createOrderData));
+        } catch (Exception $e) {
+            return $this->notFoundJson([
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 
     /**

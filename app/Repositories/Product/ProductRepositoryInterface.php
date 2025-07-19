@@ -14,4 +14,9 @@ interface ProductRepositoryInterface extends RepositoryInterface
      * @return Collection<ProductData>
      */
     public function all(int $offset = 0, int $limit = 10): Collection;
+
+    /**
+     * @return Collection<ProductData>
+     */
+    public function allProductsBy(int $warehouseId): Collection;
 }

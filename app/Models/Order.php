@@ -48,6 +48,7 @@ class Order extends Model
 
     protected $casts = [
         'status' => OrderStatusEnum::class,
+        'completed_at' => 'datetime',
     ];
 
     /**
