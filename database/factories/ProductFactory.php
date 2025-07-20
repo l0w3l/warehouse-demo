@@ -20,12 +20,12 @@ class ProductFactory extends Factory
             'Смартфон iPhone 15', 'Ноутбук MacBook Pro', 'Наушники AirPods Pro',
             'Планшет iPad Air', 'Умные часы Apple Watch', 'Фотоаппарат Canon EOS',
             'Телевизор Samsung QLED', 'Игровая консоль PlayStation 5',
-            'Монитор Dell 27"', 'Клавиатура Logitech MX'
+            'Монитор Dell 27"', 'Клавиатура Logitech MX',
         ];
 
         return [
             'name' => $this->faker->unique()->randomElement($products),
-            'price' => $this->faker->randomFloat(2, 50,  200),
+            'price' => $this->faker->randomFloat(2, 50, 200),
         ];
     }
 }

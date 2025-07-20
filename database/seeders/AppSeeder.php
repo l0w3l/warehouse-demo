@@ -13,7 +13,9 @@ use Illuminate\Database\Seeder;
 class AppSeeder extends Seeder
 {
     const PRODUCTS_COUNT = 10;
+
     const WAREHOUSE_COUNT = 5;
+
     const ORDERS_COUNT = 10;
 
     /**
@@ -40,17 +42,19 @@ class AppSeeder extends Seeder
             }
 
             foreach (range(0, self::ORDERS_COUNT) as $_) {
-                /** @var Product $product */
-                $product = $concreteProducts->random();
-
                 $order = Order::factory()->create([
                     'warehouse_id' => $warehouse->id,
                 ]);
 
-                OrderItem::factory()->create([
-                    'order_id' => $order->id,
-                    'product_id' => $product->id,
-                ]);
+                foreach (range(0, fake()->numberBetween(1, 10)) as $_) {
+                    /** @var Product $product */
+                    $product = $concreteProducts->random();
+
+                    OrderItem::factory()->create([
+                        'order_id' => $order->id,
+                        'product_id' => $product->id,
+                    ]);
+                }
             }
         }
     }

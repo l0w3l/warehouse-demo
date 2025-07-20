@@ -19,7 +19,7 @@ class WarehouseFactory extends Factory
         $cities = ['Москва', 'Сочи', 'Калининград', 'Владивосток', 'Новосибирск', 'Екатеринбург'];
 
         return [
-            'name' => 'Склад в ' . $this->faker->unique()->randomElement($cities),
+            'name' => 'Склад в '.$this->faker->unique()->randomElement($cities),
         ];
     }
 }
