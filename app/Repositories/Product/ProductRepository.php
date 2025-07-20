@@ -59,7 +59,7 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryI
                     'id' => $product->id,
                     'name' => $product->name,
                     'price' => $product->price,
-                    'warehouses' => $product->stocks->map(function (Stock $stock) {
+                    'warehouses' => $product->stocks->unique('warehouse_id')->sortBy('warehouse_id')->map(function (Stock $stock) {
                         return [
                             'id' => $stock->warehouse->id,
                             'name' => $stock->warehouse->name,

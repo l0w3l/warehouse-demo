@@ -5,7 +5,7 @@ import { StockChangeCollection } from '@/store/api/DTO/StockHistory/StockChangeC
 import { WarehouseProductCollection } from '@/store/api/DTO/Warehouses/Products/WarehouseProductCollection';
 import { ProductCollection } from '@/store/api/DTO/Products/ProductCollection';
 import { OrderCollection } from '@/store/api/DTO/Orders/OrderCollection';
-import { Order, OrderFilter } from '@/store/api/DTO/Orders/Order';
+import { Order, OrderSort, OrderStatus } from '@/store/api/DTO/Orders/Order';
 import { CreateOrderTransfer } from '@/store/api/DTO/Orders/Transfer/CreateOrderTransfer';
 import { UpdateOrderTransfer } from '@/store/api/DTO/Orders/Transfer/UpdateOrderTransfer';
 
@@ -15,11 +15,11 @@ export const V1 = {
             (await httpClient.get<WarehouseCollection>(`/v1/warehouses`, { params: { offset, limit } })).data,
 
         history: async (offset: number = 0, limit: number = 10): Promise<StockChangeCollection> =>
-            (await httpClient.get<StockChangeCollection>(`/v1/warehouse/history`, { params: { offset, limit } })).data,
+            (await httpClient.get<StockChangeCollection>(`/v1/warehouses/history`, { params: { offset, limit } })).data,
 
         products: {
             index: async (warehouse: WarehouseItem, offset: number = 0, limit: number = 10): Promise<WarehouseProductCollection> =>
-                (await httpClient.get<WarehouseProductCollection>(`/v1/warehouse/${warehouse.id}/products`, { params: { offset, limit } })).data,
+                (await httpClient.get<WarehouseProductCollection>(`/v1/warehouses/${warehouse.id}/products`, { params: { offset, limit } })).data,
         },
     },
     products: {
@@ -27,8 +27,8 @@ export const V1 = {
             (await httpClient.get<ProductCollection>(`/v1/products`, { params: { offset, limit } })).data,
     },
     orders: {
-        index: async (filter: OrderFilter = OrderFilter.CREATED_AT_DESC, offset: number = 0, limit: number = 10): Promise<OrderCollection> =>
-            (await httpClient.get<OrderCollection>(`/v1/orders`, { params: { filter: filter.valueOf(), offset, limit } })).data,
+        index: async (offset: number = 0, limit: number = 10, sort: OrderSort = OrderSort.ID_DESC, filter: OrderStatus|null = null): Promise<OrderCollection> =>
+            (await httpClient.get<OrderCollection>(`/v1/orders`, { params: { filter, sort: sort.valueOf(), offset, limit } })).data,
 
         store: async (order: CreateOrderTransfer): Promise<Order> => (await httpClient.post<Order>(`/v1/orders`, order)).data,
 

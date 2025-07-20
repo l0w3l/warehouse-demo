@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { V1 } from '@/store/api';
-import { Order, OrderFilter } from '@/store/api/DTO/Orders/Order';
+import { Order, OrderSort, OrderStatus } from '@/store/api/DTO/Orders/Order';
 import { OrderCollection } from '@/store/api/DTO/Orders/OrderCollection';
 import { CreateOrderTransfer } from '@/store/api/DTO/Orders/Transfer/CreateOrderTransfer';
 import { UpdateOrderTransfer } from '@/store/api/DTO/Orders/Transfer/UpdateOrderTransfer';
@@ -8,8 +8,8 @@ import { UpdateOrderTransfer } from '@/store/api/DTO/Orders/Transfer/UpdateOrder
 export const useOrderStore = defineStore('order', {
     actions: {
         // Получить список заказов
-        async fetchOrders(offset = 0, limit = 10, filter: OrderFilter = OrderFilter.CREATED_AT_DESC): Promise<OrderCollection> {
-            const orders: OrderCollection = await V1.orders.index(filter, offset, limit);
+        async fetchOrders(offset = 0, limit = 10, sort: OrderSort = OrderSort.CREATED_AT_DESC, filter: OrderStatus): Promise<OrderCollection> {
+            const orders: OrderCollection = await V1.orders.index(offset, limit, sort, filter);
 
             orders.data.forEach((order: Order) => order.total_amount = Math.ceil(order.total_amount * 100) / 100);
 

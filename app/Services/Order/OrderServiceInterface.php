@@ -7,7 +7,8 @@ namespace App\Services\Order;
 use App\Data\Repositories\Order\OrderData;
 use App\Data\Services\Order\CreateOrderData;
 use App\Data\Services\Order\UpdateOrderData;
-use App\Enums\Reposiitories\Order\OrderFiltersEnum;
+use App\Enums\Models\Order\OrderStatusEnum;
+use App\Enums\Repositories\Order\OrderSortEnum;
 use App\Exceptions\Services\Order\CannotCreateOrderException;
 use Illuminate\Support\Collection;
 use Lowel\LaravelServiceMaker\Services\ServiceInterface;
@@ -17,9 +18,9 @@ interface OrderServiceInterface extends ServiceInterface
     /**
      * @return Collection<OrderData>
      */
-    public function all(int $offset = 0, int $limit = 10, OrderFiltersEnum|string|null $filter = null): Collection;
+    public function all(int $offset = 0, int $limit = 10, OrderSortEnum|string|null $sort = null): Collection;
 
-    public function count(): int;
+    public function count(OrderStatusEnum|string|null $filter): int;
 
     /**
      * @throws CannotCreateOrderException

@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Enums\Reposiitories\Order;
+namespace App\Enums\Repositories\Order;
 
 use App\Models\Order;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
-enum OrderFiltersEnum: string
+enum OrderSortEnum: string
 {
+    case ID_DESC = 'id_desc';
+    case ID_ASC = 'id_asc';
     case COMPLETED_AT_DESC = 'completed_at_desc';
     case COMPLETED_AT_ASC = 'completed_at_asc';
     case CREATED_AT_DESC = 'created_at_desc';
@@ -26,6 +28,8 @@ enum OrderFiltersEnum: string
     public function resolve(Builder $query): Builder
     {
         return match ($this) {
+            self::ID_DESC => $query->orderBy('id', 'desc'),
+            self::ID_ASC => $query->orderBy('id', 'asc'),
             self::COMPLETED_AT_DESC => $query->orderBy('completed_at', 'desc'),
             self::COMPLETED_AT_ASC => $query->orderBy('completed_at', 'asc'),
             self::CREATED_AT_DESC => $query->orderBy('created_at', 'desc'),

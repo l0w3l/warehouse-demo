@@ -5,7 +5,9 @@ import { OrderProduct } from '@/store/api/DTO/Orders/OrderProduct';
 /**
  * Типы сортировок
  */
-export enum OrderFilter {
+export enum OrderSort {
+    ID_DESC = 'id_desc',
+    ID_ASC = 'id_asc',
     COMPLETED_AT_DESC = 'completed_at_desc',
     COMPLETED_AT_ASC = 'completed_at_asc',
     CREATED_AT_DESC = 'created_at_desc',
@@ -22,6 +24,10 @@ export enum OrderFilter {
  * Статусы заказа
  */
 export type OrderStatus = 'completed' | 'cancelled' | 'active';
+
+export function isOrderStatus(status: string): status is OrderStatus {
+    return ['completed', 'cancelled', 'active'].includes(status);
+}
 
 /**
  * Основной интерфейс заказа

@@ -1,0 +1,25 @@
+Dashboard.vue<script setup lang="ts">
+import AppLayout from '@/layouts/AppLayout.vue';
+import { type BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/vue3';
+import OrdersTable from '@/components/Warehouse/Orders/OrdersTable.vue';
+import ProductsTable from '@/components/Warehouse/Products/ProductsTable.vue';
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Orders',
+        href: '/orders',
+    },
+];
+
+</script>
+
+<template>
+    <Head title="Dashboard" />
+
+    <AppLayout :breadcrumbs="breadcrumbs">
+        <div class="grid h-screen grid-rows-[auto_1fr_auto] overflow-x-auto rounded-xl p-4">
+            <ProductsTable />
+        </div>
+    </AppLayout>
+</template>
