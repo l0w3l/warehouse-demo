@@ -35,10 +35,10 @@ export const V1 = {
         update: async (order: Order, newOrder: UpdateOrderTransfer): Promise<Order> =>
             (await httpClient.put<Order>(`/v1/orders/${order.id}`, newOrder)).data,
 
-        cancel: async (order: Order): Promise<Order> => (await httpClient.get(`/v1/order/${order.id}/cancel`)).data,
+        cancel: async (order: Order): Promise<Order> => (await httpClient.get(`/v1/orders/${order.id}/cancel`)).data,
 
-        complete: async (order: Order): Promise<Order> => (await httpClient.get(`/v1/order/${order.id}/complete`)).data,
+        complete: async (order: Order): Promise<Order> => (await httpClient.get(`/v1/orders/${order.id}/complete`)).data,
 
-        restore: async (order: Order): Promise<Order> => (await httpClient.get(`/v1/order/${order.id}/restore`)).data,
+        restore: async (order: Order): Promise<Order> => (await httpClient.get(`/v1/orders/${order.id}/restore`)).data,
     },
 };

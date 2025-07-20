@@ -8,8 +8,12 @@ import { UpdateOrderTransfer } from '@/store/api/DTO/Orders/Transfer/UpdateOrder
 export const useOrderStore = defineStore('order', {
     actions: {
         // Получить список заказов
-        async fetchOrders(filter: OrderFilter = OrderFilter.CREATED_AT_DESC, offset = 0, limit = 10): Promise<OrderCollection> {
-            return await V1.orders.index(filter, offset, limit);
+        async fetchOrders(offset = 0, limit = 10, filter: OrderFilter = OrderFilter.CREATED_AT_DESC): Promise<OrderCollection> {
+            const orders: OrderCollection = await V1.orders.index(filter, offset, limit);
+
+            orders.data.forEach((order: Order) => order.total_amount = Math.ceil(order.total_amount * 100) / 100);
+
+            return orders;
         },
 
         // Создать новый заказ
