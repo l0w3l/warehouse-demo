@@ -97,7 +97,7 @@ class OrderRepository extends AbstractRepository implements OrderRepositoryInter
 
     public function setStatus(int $orderId, OrderStatusEnum $orderStatusEnum): OrderData
     {
-        $order = Order::with('warehouse.stock')->find($orderId) ?? throw new OrderNotFoundException("Order with id {$orderId} not found");
+        $order = Order::with('warehouse.stocks')->find($orderId) ?? throw new OrderNotFoundException("Order with id {$orderId} not found");
 
         if ($order->status === OrderStatusEnum::COMPLETED) {
             throw new ChangeCompletedStatusException('Cannot change completed order');

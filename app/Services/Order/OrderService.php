@@ -46,7 +46,7 @@ class OrderService extends AbstractService implements OrderServiceInterface
             $productsByGivenWarehouse = $this->productRepository->allProductsBy($createOrderData->warehouse_id);
 
             $productsAndQuantityFiltered = (new Collection($createOrderData->products))
-                ->filter(fn (CreateOrderProductsData $x) => $productsByGivenWarehouse->contains('id', '=', $x->id))
+                ->filter(fn (CreateOrderProductsData $x) => $productsByGivenWarehouse->products->contains('id', '=', $x->id))
                 ->toArray();
 
             return $this->orderRepository->create(
@@ -67,7 +67,7 @@ class OrderService extends AbstractService implements OrderServiceInterface
             $productsByGivenWarehouse = $this->productRepository->allProductsBy($updateOrderData->warehouse_id);
 
             $productsAndQuantityFiltered = (new Collection($updateOrderData->products))
-                ->filter(fn (CreateOrderProductsData $x) => $productsByGivenWarehouse->contains('id', '=', $x->id))
+                ->filter(fn (CreateOrderProductsData $x) => $productsByGivenWarehouse->products->contains('id', '=', $x->id))
                 ->toArray();
 
             return $this->orderRepository->update(

@@ -45,7 +45,7 @@ test('order store test', function () {
     $testRequest = [
         'customer' => 'test',
         'warehouse_id' => $warehouse->id,
-        'products' => $warehouse->stock->map(fn (Stock $stock) => [
+        'products' => $warehouse->stocks->map(fn (Stock $stock) => [
             'id' => $stock->product_id,
             'quantity' => fake()->numberBetween(1, $stock->stock),
         ]),
@@ -83,7 +83,7 @@ test('order update test', function () {
     $testRequest = [
         'customer' => 'test',
         'warehouse_id' => $warehouse->id,
-        'products' => $warehouse->stock->map(fn (Stock $stock) => [
+        'products' => $warehouse->stocks->map(fn (Stock $stock) => [
             'id' => $stock->product_id,
             'quantity' => fake()->numberBetween(1, $stock->stock),
         ]),
@@ -96,7 +96,7 @@ test('order update test', function () {
     $testRequest2 = [
         'customer' => 'test2',
         'warehouse_id' => $warehouse->id,
-        'products' => $warehouse->stock->map(fn (Stock $stock) => [
+        'products' => $warehouse->stocks->map(fn (Stock $stock) => [
             'id' => $stock->product_id,
             'quantity' => fake()->numberBetween(1, $stock->stock),
         ]),
@@ -141,7 +141,7 @@ test('order cancel test', function () {
     $testRequest = [
         'customer' => 'test',
         'warehouse_id' => $warehouse->id,
-        'products' => $warehouse->stock->map(fn (Stock $stock) => [
+        'products' => $warehouse->stocks->map(fn (Stock $stock) => [
             'id' => $stock->product_id,
             'quantity' => fake()->numberBetween(1, $stock->stock),
         ]),
@@ -188,7 +188,7 @@ test('order restore test', function () {
     $testRequest = [
         'customer' => 'test',
         'warehouse_id' => $warehouse->id,
-        'products' => $warehouse->stock->map(fn (Stock $stock) => [
+        'products' => $warehouse->stocks->map(fn (Stock $stock) => [
             'id' => $stock->product_id,
             'quantity' => fake()->numberBetween(1, $stock->stock),
         ]),
@@ -243,7 +243,7 @@ test('order complete test', function () {
     $testRequest = [
         'customer' => 'test',
         'warehouse_id' => $warehouse->id,
-        'products' => $warehouse->stock->map(fn (Stock $stock) => [
+        'products' => $warehouse->stocks->map(fn (Stock $stock) => [
             'id' => $stock->product_id,
             'quantity' => fake()->numberBetween(1, $stock->stock),
         ]),

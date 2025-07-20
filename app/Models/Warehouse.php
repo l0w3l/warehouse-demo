@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
  * @property-read int|null $orders_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Stock> $stock
- * @property-read int|null $stock_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Stock> $stocks
+ * @property-read int|null $stocks_count
  *
  * @method static \Database\Factories\WarehouseFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Warehouse newModelQuery()
@@ -47,7 +47,7 @@ class Warehouse extends Model
     /**
      * @return HasMany<Stock>
      */
-    public function stock(): HasMany
+    public function stocks(): HasMany
     {
         return $this->hasMany(Stock::class);
     }
