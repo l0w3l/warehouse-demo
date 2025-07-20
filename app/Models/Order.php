@@ -32,6 +32,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereWarehouseId($value)
  *
+ * @property-read int|null $order_items_count
+ *
  * @mixin \Eloquent
  */
 class Order extends Model

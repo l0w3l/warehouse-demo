@@ -3,6 +3,7 @@
 use App\Enums\Models\Order\OrderStatusEnum;
 use App\Models\Order;
 use App\Models\Stock;
+use App\Models\StockHistory;
 use Database\Seeders\AppSeeder;
 
 beforeEach(function () {
@@ -252,7 +253,8 @@ test('order complete test', function () {
 
     $oldStock = Stock::where('warehouse_id', $warehouse->id)->get();
 
-    expect($creationResponse->json('data.status'))->toEqual(OrderStatusEnum::ACTIVE->value);
+    expect($creationResponse->json('data.status'))->toEqual(OrderStatusEnum::ACTIVE->value)
+        ->and(StockHistory::count())->toEqual(0);
 
     $completedResponse = $this->getJson(route('api.v1.orders.complete', [
         'order' => Order::latest('id')->first()->id,
@@ -281,7 +283,8 @@ test('order complete test', function () {
             ],
         ]);
 
-    expect($completedResponse->json('data.status'))->toEqual(OrderStatusEnum::COMPLETED->value);
+    expect($completedResponse->json('data.status'))->toEqual(OrderStatusEnum::COMPLETED->value)
+        ->and(StockHistory::count())->toEqual(count($creationResponse->json('data.products')));
 
     $newStock = Stock::where('warehouse_id', $warehouse->id)->get();
 

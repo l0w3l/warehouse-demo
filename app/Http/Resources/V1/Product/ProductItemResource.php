@@ -2,12 +2,12 @@
 
 namespace App\Http\Resources\V1\Product;
 
-use App\Data\Repositories\Product\ProductData;
+use App\Data\Repositories\Product\FullProductData;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin ProductData
+ * @mixin FullProductData
  */
 class ProductItemResource extends JsonResource
 {

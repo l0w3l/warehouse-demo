@@ -16,6 +16,7 @@ use App\Exceptions\Services\Order\FailedOrderCompleteAction;
 use App\Repositories\Order\OrderRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\Warehouse\WarehouseRepositoryInterface;
+use App\Services\StockHistory\StockHistoryServiceInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Lowel\LaravelServiceMaker\Services\AbstractService;
@@ -23,6 +24,8 @@ use Lowel\LaravelServiceMaker\Services\AbstractService;
 class OrderService extends AbstractService implements OrderServiceInterface
 {
     public function __construct(
+        public StockHistoryServiceInterface $stockHistoryService,
+
         public OrderRepositoryInterface $orderRepository,
         public WarehouseRepositoryInterface $warehouseRepository,
         public ProductRepositoryInterface $productRepository,
@@ -106,6 +109,7 @@ class OrderService extends AbstractService implements OrderServiceInterface
                         $product->id,
                         $product->quantity,
                     );
+                    $this->stockHistoryService->decAction($orderData->warehouse->id, $product->id, $product->quantity);
                 }
 
                 return $orderData;

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
@@ -25,6 +26,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Stock whereProductId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Stock whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Stock whereWarehouseId($value)
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\StockHistory> $stock_histories
+ * @property-read int|null $stock_histories_count
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Stock whereStock($value)
  *
  * @mixin \Eloquent
  */
@@ -53,5 +59,13 @@ class Stock extends Model
     public function warehouse(): BelongsTo
     {
         return $this->belongsTo(Warehouse::class);
+    }
+
+    /**
+     * @return HasMany<StockHistory>
+     */
+    public function stock_histories(): HasMany
+    {
+        return $this->hasMany(StockHistory::class);
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories\Product;
 
-use App\Data\Repositories\Product\ProductData;
+use App\Data\Repositories\Product\FullProductData;
 use App\Models\Product;
 use App\Models\Stock;
 use Illuminate\Database\Eloquent\Builder;
@@ -32,11 +32,11 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryI
 
     /**
      * @param  EloquentCollection<Product>  $products
-     * @return Collection<ProductData>
+     * @return Collection<FullProductData>
      */
     private function collectProductData(EloquentCollection $products): Collection
     {
-        return ProductData::collect(
+        return FullProductData::collect(
             $products->map(function (Product $product) {
                 return [
                     'id' => $product->id,

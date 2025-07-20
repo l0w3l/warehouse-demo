@@ -11,6 +11,6 @@ class ProductServiceFactory implements ServiceFactoryInterface
 {
     public function get(array $params = []): ProductServiceInterface
     {
-        return App::make(ProductService::class);
+        return App::make(ProductService::class, $params);
     }
 }
