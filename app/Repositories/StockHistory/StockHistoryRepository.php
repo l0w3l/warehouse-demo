@@ -21,6 +21,11 @@ class StockHistoryRepository extends AbstractRepository implements StockHistoryR
         return $this->collectStockHistory($stockHistory);
     }
 
+    public function count(): int
+    {
+        return StockHistory::count();
+    }
+
     public function allFor(int $warehouseId, int $offset = 0, $limit = 10): Collection
     {
         $stockHistory = StockHistory::with('stock.warehouse', 'stock.product')

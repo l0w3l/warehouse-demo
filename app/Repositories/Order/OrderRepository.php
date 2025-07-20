@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Repositories\Order;
 
 use App\Data\Repositories\Order\OrderData;
-use App\Enums\Enums\Reposiitories\Order\OrderFiltersEnum;
 use App\Enums\Models\Order\OrderStatusEnum;
+use App\Enums\Repositories\Order\OrderSortEnum;
 use App\Exceptions\Repositories\DBTransactionException;
 use App\Exceptions\Repositories\Order\CanceledToCompleteStatusException;
 use App\Exceptions\Repositories\Order\CannotUpdateNonActiveOrders;
@@ -21,17 +21,28 @@ use Lowel\LaravelServiceMaker\Repositories\AbstractRepository;
 
 class OrderRepository extends AbstractRepository implements OrderRepositoryInterface
 {
-    public function all(int $offset = 0, int $limit = 10, ?OrderFiltersEnum $filtersEnum = null): Collection
+    public function all(int $offset = 0, int $limit = 10, ?OrderSortEnum $sortEnum = null, ?OrderStatusEnum $filter = null): Collection
     {
         $ordersQuery = Order::with('warehouse', 'order_items');
 
-        if ($filtersEnum) {
-            $ordersQuery = $filtersEnum->resolve($ordersQuery);
+        if ($sortEnum) {
+            $ordersQuery = $sortEnum->resolve($ordersQuery);
+        }
+        if ($filter) {
+            $ordersQuery = $ordersQuery->where('status', $filter);
         }
 
         $orders = $ordersQuery->offset($offset)->limit($limit)->get();
 
         return $this->collectOrders($orders);
+    }
+
+    public function count(?OrderStatusEnum $filter = null): int
+    {
+        if ($filter) {
+            return Order::whereStatus($filter)->count();
+        }
+        return Order::count();
     }
 
     public function create(string $customer, int $warehouseId, array $products = []): OrderData

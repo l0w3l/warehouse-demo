@@ -25,11 +25,13 @@ class OrderController extends Controller
     {
         $offset = $request->get('offset', 0);
         $limit = $request->get('limit', 10);
+        $sort = $request->get('sort', null);
         $filter = $request->get('filter', null);
 
-        $orders = $this->orderService->all($offset, $limit, $filter);
+        $orders = $this->orderService->all($offset, $limit, $sort, $filter);
 
-        return OrderItemResource::collection($orders);
+        return OrderItemResource::collection($orders)
+            ->additional(['count' => $this->orderService->count($filter)]);
     }
 
     /**

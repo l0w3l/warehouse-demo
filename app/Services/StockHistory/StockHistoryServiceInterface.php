@@ -16,6 +16,8 @@ interface StockHistoryServiceInterface extends ServiceInterface
      */
     public function get(?int $warehouseId = null, int $offset = 0, int $limit = 10): Collection;
 
+    public function count(): int;
+
     /**
      * @throws ProductForWarehouseNotFoundException
      */

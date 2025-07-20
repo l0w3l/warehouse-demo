@@ -2,22 +2,23 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import PlaceholderPattern from '../components/PlaceholderPattern.vue';
+import OrdersTable from '@/components/Warehouse/Orders/OrdersTable.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Dashboard',
-        href: '/dashboard',
+        title: 'Orders',
+        href: '/orders',
     },
 ];
+
 </script>
 
 <template>
     <Head title="Dashboard" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
-
+        <div class="grid h-screen grid-rows-[auto_1fr_auto] overflow-x-auto rounded-xl p-4">
+            <OrdersTable />
         </div>
     </AppLayout>
 </template>

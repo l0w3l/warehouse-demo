@@ -16,6 +16,8 @@ interface StockHistoryRepositoryInterface extends RepositoryInterface
      */
     public function all(int $offset = 0, $limit = 10): Collection;
 
+    public function count(): int;
+
     /**
      * @return Collection<StockHistoryItemData>
      */

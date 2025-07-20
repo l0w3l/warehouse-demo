@@ -16,6 +16,8 @@ interface WarehouseRepositoryInterface extends RepositoryInterface
      */
     public function all(int $offset = 0, int $limit = 10): Collection;
 
+    public function count(): int;
+
     /**
      * @throws WarehouseNotFoundException
      */

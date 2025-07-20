@@ -14,4 +14,6 @@ interface WarehouseServiceInterface extends ServiceInterface
      * @return Collection<WarehouseData>
      */
     public function all(int $offset = 0, int $limit = 10): Collection;
+
+    public function count(): int;
 }

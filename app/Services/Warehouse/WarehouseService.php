@@ -18,4 +18,9 @@ class WarehouseService extends AbstractService implements WarehouseServiceInterf
     {
         return $this->repository->all($offset, $limit);
     }
+
+    public function count(): int
+    {
+        return $this->repository->count();
+    }
 }

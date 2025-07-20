@@ -20,7 +20,7 @@ class OrderFactory extends Factory
         return [
             'customer' => $this->faker->name,
             'status' => $this->faker->randomElement(OrderStatusEnum::toArray()),
-            'completed_at' => $this->faker->randomElement([null, now()]),
+            'completed_at' => $this->faker->randomElement([null, fake()->dateTime()]),
         ];
     }
 }

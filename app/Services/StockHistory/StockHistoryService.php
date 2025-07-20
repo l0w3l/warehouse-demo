@@ -24,6 +24,11 @@ class StockHistoryService extends AbstractService implements StockHistoryService
         }
     }
 
+    public function count(): int
+    {
+        return $this->stockHistoryRepository->count();
+    }
+
     public function decAction(int $warehouse_id, int $product_id, int $quantity): StockHistoryItemData
     {
         return $this->incAction($warehouse_id, $product_id, -$quantity);

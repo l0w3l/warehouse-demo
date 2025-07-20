@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Repositories\Order;
 
 use App\Data\Repositories\Order\OrderData;
-use App\Enums\Enums\Reposiitories\Order\OrderFiltersEnum;
 use App\Enums\Models\Order\OrderStatusEnum;
+use App\Enums\Repositories\Order\OrderSortEnum;
 use App\Exceptions\Repositories\DBTransactionException;
 use App\Exceptions\Repositories\Order\CanceledToCompleteStatusException;
 use App\Exceptions\Repositories\Order\ChangeCompletedStatusException;
@@ -19,7 +19,9 @@ interface OrderRepositoryInterface extends RepositoryInterface
     /**
      * @return Collection<OrderData>
      */
-    public function all(int $offset = 0, int $limit = 10, ?OrderFiltersEnum $filtersEnum = null): Collection;
+    public function all(int $offset = 0, int $limit = 10, ?OrderSortEnum $sortEnum = null, ?OrderStatusEnum $filterEnum = null): Collection;
+
+    public function count(?OrderStatusEnum $filter = null): int;
 
     /**
      * @param array{

@@ -8,8 +8,8 @@ use App\Data\Repositories\Order\OrderData;
 use App\Data\Services\Order\CreateOrderData;
 use App\Data\Services\Order\CreateOrderProductsData;
 use App\Data\Services\Order\UpdateOrderData;
-use App\Enums\Enums\Reposiitories\Order\OrderFiltersEnum;
 use App\Enums\Models\Order\OrderStatusEnum;
+use App\Enums\Repositories\Order\OrderSortEnum;
 use App\Exceptions\Repositories\DBTransactionException;
 use App\Exceptions\Services\Order\CannotCreateOrderException;
 use App\Exceptions\Services\Order\FailedOrderCompleteAction;
@@ -31,13 +31,26 @@ class OrderService extends AbstractService implements OrderServiceInterface
         public ProductRepositoryInterface $productRepository,
     ) {}
 
-    public function all(int $offset = 0, int $limit = 10, OrderFiltersEnum|string|null $filter = null): Collection
+    public function all(int $offset = 0, int $limit = 10, OrderSortEnum|string|null $sort = null, OrderStatusEnum|string|null $filter = null): Collection
     {
-        if (is_string($filter)) {
-            $filter = OrderFiltersEnum::tryFrom($filter);
+        if (is_string($sort)) {
+            $sort = OrderSortEnum::tryFrom($sort);
         }
 
-        return $this->orderRepository->all($offset, $limit, $filter);
+        if (is_string($filter)) {
+            $filter = OrderStatusEnum::tryFrom($filter);
+        }
+
+        return $this->orderRepository->all($offset, $limit, $sort, $filter);
+    }
+
+    public function count(string|OrderStatusEnum|null $filter = null): int
+    {
+        if (is_string($filter)) {
+            $filter = OrderStatusEnum::tryFrom($filter);
+        }
+
+        return $this->orderRepository->count($filter);
     }
 
     public function create(CreateOrderData $createOrderData): OrderData
@@ -115,7 +128,8 @@ class OrderService extends AbstractService implements OrderServiceInterface
                 return $orderData;
             });
         } catch (\Throwable $e) {
-            throw new FailedOrderCompleteAction('Failed complete order action');
+
+            throw new FailedOrderCompleteAction("Failed complete order action\n{$e->getMessage()}", previous: $e);
         }
     }
 }
