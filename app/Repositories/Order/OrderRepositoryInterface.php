@@ -21,6 +21,8 @@ interface OrderRepositoryInterface extends RepositoryInterface
      */
     public function all(int $offset = 0, int $limit = 10, ?OrderFiltersEnum $filtersEnum = null): Collection;
 
+    public function count(): int;
+
     /**
      * @param array{
      *     id: int,

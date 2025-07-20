@@ -29,7 +29,8 @@ class WarehouseController extends Controller
 
         $warehouses = $this->warehouseService->all($offset, $limit);
 
-        return WarehouseItemResource::collection($warehouses);
+        return WarehouseItemResource::collection($warehouses)
+            ->additional(['count' => $this->warehouseService->count()]);
     }
 
     public function history(Request $request)
@@ -40,7 +41,8 @@ class WarehouseController extends Controller
 
         $stockHistory = $this->stockHistoryService->get($warehouseId, $offset, $limit);
 
-        return StockHistoryResource::collection($stockHistory);
+        return StockHistoryResource::collection($stockHistory)
+            ->additional(['count' => $this->stockHistoryService->count()]);
     }
 
     public function products(Request $request, int $warehouse)
@@ -50,6 +52,7 @@ class WarehouseController extends Controller
 
         $products = $this->productService->allFor($warehouse, $offset, $limit);
 
-        return WarehouseProductsResource::make($products);
+        return WarehouseProductsResource::make($products)
+            ->additional(['count' => $this->productService->countFor($warehouse)]);
     }
 }

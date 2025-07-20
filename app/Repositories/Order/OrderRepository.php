@@ -34,6 +34,11 @@ class OrderRepository extends AbstractRepository implements OrderRepositoryInter
         return $this->collectOrders($orders);
     }
 
+    public function count(): int
+    {
+        return Order::count();
+    }
+
     public function create(string $customer, int $warehouseId, array $products = []): OrderData
     {
         try {

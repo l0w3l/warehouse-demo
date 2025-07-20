@@ -21,10 +21,22 @@ class ProductService extends AbstractService implements ProductServiceInterface
         return $this->productRepository->all($offset, $limit);
     }
 
+    public function count(): int
+    {
+        return $this->productRepository->count();
+    }
+
     public function allFor(int|WarehouseData $warehouseData, int $offset = 0, int $limit = 10): WarehouseProductsData
     {
         $warehouseData = $warehouseData->id ?? $warehouseData;
 
         return $this->productRepository->allProductsBy($warehouseData);
+    }
+
+    public function countFor(int|WarehouseData $warehouseData): int
+    {
+        $warehouseData = $warehouseData->id ?? $warehouseData;
+
+        return $this->productRepository->countFor($warehouseData);
     }
 }

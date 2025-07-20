@@ -23,6 +23,7 @@ class ProductController extends Controller
 
         $products = $this->productService->all($offset, $limit);
 
-        return ProductItemResource::collection($products);
+        return ProductItemResource::collection($products)
+            ->additional(['count' => $products->count()]);
     }
 }

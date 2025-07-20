@@ -19,6 +19,8 @@ interface OrderServiceInterface extends ServiceInterface
      */
     public function all(int $offset = 0, int $limit = 10, OrderFiltersEnum|string|null $filter = null): Collection;
 
+    public function count(): int;
+
     /**
      * @throws CannotCreateOrderException
      */

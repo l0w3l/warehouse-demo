@@ -24,6 +24,11 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryI
         return $this->collectProductData($products);
     }
 
+    public function count(): int
+    {
+        return Product::count();
+    }
+
     public function allProductsBy(int $warehouseId, int $offset = 0, int $limit = 10): WarehouseProductsData
     {
         $warehouse = Warehouse::find($warehouseId) ?? throw new WarehouseNotFoundException;
@@ -33,6 +38,13 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryI
             ->offset($offset)->limit($limit)->get();
 
         return $this->wrapToWarehouseProducts($warehouse, $products);
+    }
+
+    public function countFor(int $warehouseId): int
+    {
+        return Product::with('stocks.warehouse')
+            ->whereHas('stocks', fn (Builder $builder) => $builder->where('warehouse_id', $warehouseId))
+            ->count();
     }
 
     /**

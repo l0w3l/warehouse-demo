@@ -40,6 +40,11 @@ class OrderService extends AbstractService implements OrderServiceInterface
         return $this->orderRepository->all($offset, $limit, $filter);
     }
 
+    public function count(): int
+    {
+        return $this->orderRepository->count();
+    }
+
     public function create(CreateOrderData $createOrderData): OrderData
     {
         try {

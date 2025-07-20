@@ -17,5 +17,9 @@ interface ProductServiceInterface extends ServiceInterface
      */
     public function all(int $offset = 0, int $limit = 10): Collection;
 
+    public function count(): int;
+
     public function allFor(WarehouseData|int $warehouseData, int $offset = 0, int $limit = 10): WarehouseProductsData;
+
+    public function countFor(WarehouseData|int $warehouseData): int;
 }

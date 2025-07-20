@@ -29,7 +29,8 @@ class OrderController extends Controller
 
         $orders = $this->orderService->all($offset, $limit, $filter);
 
-        return OrderItemResource::collection($orders);
+        return OrderItemResource::collection($orders)
+            ->additional(['count' => $this->orderService->count()]);
     }
 
     /**

@@ -21,6 +21,11 @@ class WarehouseRepository extends AbstractRepository implements WarehouseReposit
         return WarehouseData::collect($warehouses);
     }
 
+    public function count(): int
+    {
+        return Warehouse::count();
+    }
+
     public function findById(int $id): WarehouseData
     {
         $warehouse = Warehouse::find($id);

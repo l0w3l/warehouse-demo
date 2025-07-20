@@ -17,8 +17,12 @@ interface ProductRepositoryInterface extends RepositoryInterface
      */
     public function all(int $offset = 0, int $limit = 10): Collection;
 
+    public function count(): int;
+
     /**
      * @throws WarehouseNotFoundException
      */
     public function allProductsBy(int $warehouseId, int $offset = 0, int $limit = 10): WarehouseProductsData;
+
+    public function countFor(int $warehouseId): int;
 }
