@@ -5,6 +5,13 @@ import { OrderCollection } from '@/store/api/DTO/Orders/OrderCollection';
 import { useOrderStore } from '@/store/order';
 import OrderItemModal from '@/components/Warehouse/Orders/OrderItemModal.vue';
 import { isOrderStatus, Order, OrderSort, OrderStatus } from '@/store/api/DTO/Orders/Order';
+import CreateOrderForm from '@/components/Warehouse/Orders/CreateOrderForm.vue';
+
+const createOrderDialog = reactive<{
+    visible: boolean,
+}>({
+    visible: false,
+});
 
 const ordersDialog = reactive<{
     visible: boolean;
@@ -102,6 +109,15 @@ const handleFilter = async (filters: Record<string, string[]>) => {
 </script>
 
 <template>
+    <div class="align-top flex justify-end px-4 py-2">
+        <el-button type="primary" @click="createOrderDialog.visible = true">Create</el-button>
+        <el-dialog
+            v-model="createOrderDialog.visible"
+            width="800"
+        >
+            <CreateOrderForm />
+        </el-dialog>
+    </div>
     <div class="overflow-auto align-middle">
         <el-table :data="data.orders.data" @sort-change="handleSort" @filter-change="handleFilter" class="justify-self-start" @row-click="rowClickHandler">
             <el-table-column prop="id" label="Id" width="50" sortable="custom" />
