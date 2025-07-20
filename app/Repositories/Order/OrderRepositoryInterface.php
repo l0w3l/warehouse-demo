@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Repositories\Order;
 
 use App\Data\Repositories\Order\OrderData;
-use App\Enums\Enums\Reposiitories\Order\OrderFiltersEnum;
 use App\Enums\Models\Order\OrderStatusEnum;
+use App\Enums\Reposiitories\Order\OrderFiltersEnum;
 use App\Exceptions\Repositories\DBTransactionException;
 use App\Exceptions\Repositories\Order\CanceledToCompleteStatusException;
 use App\Exceptions\Repositories\Order\ChangeCompletedStatusException;

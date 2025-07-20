@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums\Enums\Reposiitories\Order;
+namespace App\Enums\Reposiitories\Order;
 
 use App\Models\Order;
 use Illuminate\Database\Eloquent\Builder;

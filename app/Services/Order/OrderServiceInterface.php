@@ -7,7 +7,7 @@ namespace App\Services\Order;
 use App\Data\Repositories\Order\OrderData;
 use App\Data\Services\Order\CreateOrderData;
 use App\Data\Services\Order\UpdateOrderData;
-use App\Enums\Enums\Reposiitories\Order\OrderFiltersEnum;
+use App\Enums\Reposiitories\Order\OrderFiltersEnum;
 use App\Exceptions\Services\Order\CannotCreateOrderException;
 use Illuminate\Support\Collection;
 use Lowel\LaravelServiceMaker\Services\ServiceInterface;
