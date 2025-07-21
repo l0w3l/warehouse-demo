@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import Pagination from '@/components/Pagination.vue';
-import { computed, onMounted, reactive } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 import { useWarehouseStore } from '@/store/warehouse';
 import { WarehouseCollection } from '@/store/api/DTO/Warehouses/WarehouseCollection';
 import { WarehouseItem } from '@/store/api/DTO/Warehouses/WarehouseItem';
@@ -25,6 +25,7 @@ const data = reactive<{
     warehouses: { count: 0, data: [] },
 });
 
+const loading = ref<boolean>(true);
 const warehousesStore = useWarehouseStore();
 
 const paginationCallback = async (newOffset: number) => {
@@ -42,7 +43,9 @@ const rowClickHandler = async (row: { id: number }): Promise<any> => {
 };
 
 const refreshWarehousesData = async () => {
+    loading.value = true;
     data.warehouses = await warehousesStore.fetchWarehouses(data.offset, data.limit);
+    loading.value = false;
 }
 
 onMounted(async function () {
@@ -55,21 +58,23 @@ const modalWarehouse = computed<WarehouseItem|undefined>(() => {
 </script>
 
 <template>
-    <div class="overflow-auto align-middle">
-        <el-table :data="data.warehouses.data" class="justify-self-start" @row-click="rowClickHandler">
-            <el-table-column prop="id" label="Id" width="70" />
-            <el-table-column prop="name" label="Name" align="center" sort/>
-        </el-table>
-    </div>
+    <div v-loading="loading" class="flex h-screen flex-col justify-center">
+        <div class="overflow-auto align-middle">
+            <el-table :data="data.warehouses.data" class="flex justify-center" height="394" @row-click="rowClickHandler">
+                <el-table-column prop="id" label="Id" width="70" />
+                <el-table-column prop="name" label="Name" align="center" width="300"/>
+            </el-table>
+        </div>
 
-    <div class="flex justify-center align-bottom">
-        <Pagination
-            class=""
-            :offset="data.offset"
-            :limit="data.limit"
-            :count="data.warehouses.count"
-            @update:offset="paginationCallback"
-        />
+        <div class="flex justify-center align-bottom">
+            <Pagination
+                class=""
+                :offset="data.offset"
+                :limit="data.limit"
+                :count="data.warehouses.count"
+                @update:offset="paginationCallback"
+            />
+        </div>
     </div>
 
     <WarehousesItemModal

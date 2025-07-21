@@ -6,8 +6,8 @@ import StockHistoryTable from '@/components/Warehouse/StockHistory/StockHistoryT
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Orders',
-        href: '/orders',
+        title: 'Stock History',
+        href: '/stock-history',
     },
 ];
 

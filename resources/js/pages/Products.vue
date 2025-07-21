@@ -6,8 +6,8 @@ import ProductsTable from '@/components/Warehouse/Products/ProductsTable.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Orders',
-        href: '/orders',
+        title: 'Products',
+        href: '/products',
     },
 ];
 
