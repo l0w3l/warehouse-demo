@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { FullProduct } from '@/store/api/DTO/Products/FullProduct';
 import { WarehouseProduct } from '@/store/api/DTO/Warehouses/Products/WarehouseProduct';
 import {  reactive, watch } from 'vue';
 import { useWarehouseStore } from '@/store/warehouse';

@@ -5,7 +5,6 @@ import { computed, onMounted, reactive } from 'vue';
 import { useProductStore } from '@/store/product';
 import { ProductCollection } from '@/store/api/DTO/Products/ProductCollection';
 import ProductsItemModal from '@/components/Warehouse/Products/ProductsItemModal.vue';
-import { Order } from '@/store/api/DTO/Orders/Order';
 import { FullProduct } from '@/store/api/DTO/Products/FullProduct';
 
 const productsDialog = reactive<{

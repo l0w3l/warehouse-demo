@@ -2,7 +2,6 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import OrdersTable from '@/components/Warehouse/Orders/OrdersTable.vue';
 import StockHistoryTable from '@/components/Warehouse/StockHistory/StockHistoryTable.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [

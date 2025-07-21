@@ -74,7 +74,7 @@ const validateForm = async () => {
     try {
         await formRef.value.validate();
         return true;
-    } catch (_: any) {
+    } catch {
         ElMessage.error('Please fill the fields');
         return false;
     }

@@ -2,7 +2,6 @@ Dashboard.vue<script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import OrdersTable from '@/components/Warehouse/Orders/OrdersTable.vue';
 import ProductsTable from '@/components/Warehouse/Products/ProductsTable.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [

@@ -93,6 +93,7 @@ const handleSort = async ({ prop, order }: { prop: string; order: 'ascending' | 
 
 const handleFilter = async (filters: Record<string, string[]>) => {
     let cleanedFilter: string = '';
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Object.entries(filters).forEach(([_, value]) => {
         if (value && value.length) {
             cleanedFilter = value[0];

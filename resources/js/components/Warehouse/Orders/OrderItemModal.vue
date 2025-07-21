@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Order } from '@/store/api/DTO/Orders/Order';
-import { useOrderStore } from '@/store/order';
 
 const props = defineProps<{
     order?: Order,
