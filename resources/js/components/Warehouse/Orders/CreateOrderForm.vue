@@ -103,10 +103,12 @@ const handleSubmit = async () => {
         })),
     };
 
-    console.log(createOrder);
-
     await orderStore.createOrder(createOrder);
 
+    ElMessage.success({
+        message: 'Order created successfully!',
+        type: 'success',
+    });
     emit('success');
 };
 

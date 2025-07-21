@@ -6,8 +6,8 @@ import WarehousesTable from '@/components/Warehouse/Warehouses/WarehousesTable.v
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Orders',
-        href: '/orders',
+        title: 'Warehouses',
+        href: '/warehouses',
     },
 ];
 
