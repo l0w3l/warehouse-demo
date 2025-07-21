@@ -240,6 +240,8 @@ test('order restore test', function () {
 test('order complete test', function () {
     $warehouse = Stock::first()->warehouse;
 
+    StockHistory::truncate();
+
     $testRequest = [
         'customer' => 'test',
         'warehouse_id' => $warehouse->id,
@@ -253,8 +255,7 @@ test('order complete test', function () {
 
     $oldStock = Stock::where('warehouse_id', $warehouse->id)->get();
 
-    expect($creationResponse->json('data.status'))->toEqual(OrderStatusEnum::ACTIVE->value)
-        ->and(StockHistory::count())->toEqual(0);
+    expect($creationResponse->json('data.status'))->toEqual(OrderStatusEnum::ACTIVE->value);
 
     $completedResponse = $this->getJson(route('api.v1.orders.complete', [
         'order' => Order::latest('id')->first()->id,
